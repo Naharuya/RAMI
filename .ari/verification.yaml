@@ -1,0 +1,30 @@
+project: rami
+repo: Naharuya/RAMI
+protected_branches: [main]
+debounce_seconds: 1200
+max_auto_repair_attempts: 2
+require_human_for:
+  - nfc_protocol_change
+  - privacy_policy_change
+  - production_deploy
+  - app_store_publish
+checks:
+  - name: flutter-test
+    command: flutter test
+  - name: flutter-analyze
+    command: flutter analyze
+  - name: deep-link-regression
+    command: flutter test test
+    note: validate initial URI, warm URI stream, duplicate URI, invalid URI and ContentScreen navigation
+  - name: nfc-regression
+    command: flutter test test
+    note: validate NDEF parsing, card mapping, duplicate scan protection and error fallback
+build:
+  command: flutter build apk --debug
+  artifact: build/app/outputs/flutter-apk/app-debug.apk
+release_policy:
+  server_pass_required: true
+  device_pass_required: true
+  release_approved_required: true
+  auto_merge: false
+  auto_publish: false
